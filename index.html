@@ -107,9 +107,9 @@ const BASE=[
   { cat:'📺 Playlist / cả series (mỗi cái nhiều phim — tự chạy)', items:[
     { t:'Pixar SparkShorts — cả bộ', id:'PLpVg7pgd-JzP-DWROTsaMY8IDWElHMycx', kind:'playlist' },
     { t:'Larva — Full Episodes (TUBAn)', id:'PLQthiA0aCohUDhim58SswomDVJxDYu83n', kind:'playlist' },
-    { t:'Grizzy & the Lemmings — Compilations', id:'PLfcmsKi1TD5z-BLQ2GVA4txE6uAaCvDWb', kind:'playlist' },
+    { t:'Grizzy & the Lemmings — Full Episodes', id:'PL-FO97moBsZUO9fR4RYgxCTgWfdHkaHXJ', kind:'playlist' },
     { t:'Shaun the Sheep — Full Episodes', id:'PLZ4rmdfI0ZxztE3Xgh8huH2uJED159g8P', kind:'playlist' },
-    { t:"Simon's Cat — Compilation", id:'PLgEg_cI9hTvUzGbiVXEIEV6LvAYY5rKWY', kind:'playlist' },
+    { t:"Simon's Cat — Full Episodes", id:'PLgEg_cI9hTvWVp5j1nIKLwuUc6crEumRW', kind:'playlist' },
     { t:'GOBELINS — Shorts 2023 (phim trường)', id:'PL7IGBkaIQiG-SJUf1ownEQXlbv-S8s-Nw', kind:'playlist' },
     { t:'GOBELINS — Shorts 2021', id:'PL7IGBkaIQiG8vpSlI_cDV1DhV3xV9snDE', kind:'playlist' },
     { t:'One Small Step — Videos (Taiko)', id:'PLh-HUhh5bIiUCiJBoVwCiq4W9AxbMi6j2', kind:'playlist' },
@@ -181,9 +181,13 @@ function play(i){
     : `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
   document.getElementById('stage').innerHTML=`<iframe src="${src}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   document.getElementById('nowTitle').textContent=v.t;
-  document.getElementById('nowCat').textContent=v.cat + (v.kind==='playlist'?' · (tự chạy hết series)':'');
+  document.getElementById('nowCat').textContent = v.kind==='playlist'
+    ? '🎞 Playlist nhiều tập — bấm nút "Video khác" (góc dưới-phải khung) để xem & CHỌN TẬP, hoặc ◄ ► để chuyển tập'
+    : v.cat;
   const yl=document.getElementById('ytLink');
-  yl.style.display=''; yl.href = v.kind==='playlist' ? 'https://www.youtube.com/playlist?list='+v.id : 'https://www.youtube.com/watch?v='+v.id;
+  yl.style.display='';
+  if(v.kind==='playlist'){ yl.href='https://www.youtube.com/playlist?list='+v.id; yl.textContent='↗ Mở playlist (chọn tập)'; }
+  else { yl.href='https://www.youtube.com/watch?v='+v.id; yl.textContent='↗ Mở trên YouTube'; }
   renderPlaylist();
 }
 function playNext(){ if(current<flat.length-1) play(current+1); }
