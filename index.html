@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎬 Rạp Mini — Short hoạt hình tham khảo</title>
+<style>
+  :root{ --bg:#0d1117; --panel:#161b22; --panel2:#1c232c; --line:#2a3340; --ink:#e6edf3; --dim:#8b97a5; --accent:#4cc2ff; --warm:#ffb454; --good:#5ee6a8; --danger:#ff6b6b; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+  header{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap;position:sticky;top:0;z-index:10}
+  header h1{font-size:18px;font-weight:700}
+  header .sub{color:var(--dim);font-size:12px}
+  .spacer{margin-left:auto}
+  .wrap{display:grid;grid-template-columns:1fr 380px;gap:16px;padding:16px 20px;max-width:1700px;margin:0 auto}
+  @media(max-width:980px){ .wrap{grid-template-columns:1fr} }
+  .stagebox{display:flex;justify-content:center}
+  .stage{background:#000;border-radius:14px;overflow:hidden;border:1px solid var(--line);position:relative;width:100%;aspect-ratio:16/9}
+  .stage.portrait{aspect-ratio:9/16;max-width:min(440px,92%)}
+  .stage iframe{width:100%;height:100%;border:0;display:block}
+  .placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--dim);text-align:center;padding:20px}
+  .placeholder .big{font-size:42px;opacity:.5}
+  .nowbar{display:flex;align-items:center;gap:10px;margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;flex-wrap:wrap}
+  .nowbar .title{flex:1;min-width:160px;font-weight:600;font-size:15px;line-height:1.4}
+  .nowbar .cat{font-size:11px;color:var(--dim)}
+  .navbtn{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:9px;padding:9px 14px;font-size:14px;cursor:pointer;font-weight:600;white-space:nowrap;transition:all .15s}
+  .navbtn:hover{border-color:var(--accent);color:var(--accent)}
+  .navbtn.on{border-color:var(--accent);color:var(--accent);background:rgba(76,194,255,.12)}
+  .ytlink{font-size:12px;color:var(--dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  .ytlink:hover{color:var(--accent);border-color:var(--accent)}
+  .side{display:flex;flex-direction:column;gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .card h2{font-size:13px;font-weight:700;padding:11px 14px;border-bottom:1px solid var(--line);color:var(--dim);letter-spacing:.3px}
+  .cat-label{font-size:11px;font-weight:700;color:var(--warm);padding:10px 14px 4px;text-transform:uppercase;letter-spacing:.5px}
+  .item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;border-left:3px solid transparent;transition:background .12s}
+  .item:hover{background:var(--panel2)}
+  .item.active{background:rgba(76,194,255,.12);border-left-color:var(--accent)}
+  .item .num{font-size:11px;color:var(--dim);width:18px;flex-shrink:0}
+  .item .t{font-size:13px;line-height:1.35}
+  .item .pl{font-size:9px;background:var(--good);color:#012;border-radius:4px;padding:1px 5px;font-weight:700;flex-shrink:0}
+  .item.active .t{color:var(--accent);font-weight:600}
+  .item .del{margin-left:auto;color:var(--dim);font-size:12px;opacity:0;border:none;background:none;cursor:pointer}
+  .item:hover .del{opacity:1}
+  .item .del:hover{color:var(--danger)}
+  .addbox{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+  .addbox input{background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:9px 11px;font-size:13px;font-family:inherit}
+  .addbox input:focus{outline:none;border-color:var(--accent)}
+  .addbox button{background:var(--accent);color:#012;border:none;border-radius:8px;padding:9px;font-weight:700;cursor:pointer;font-size:13px}
+  .hint{font-size:11px;color:var(--dim);padding:0 14px 12px;line-height:1.5}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;padding:12px 14px}
+  .chip{font-size:12px;color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:6px 12px;text-decoration:none;cursor:pointer}
+  .chip:hover{border-color:var(--accent);color:var(--accent)}
+  .chip.lock::before{content:'🔒 ';opacity:.7}
+  footer{text-align:center;color:var(--dim);font-size:11px;padding:18px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎬 Rạp Mini — Short hoạt hình</h1>
+  <span class="sub">playlist tự chạy hết series · short dọc khỏi phí màn hình</span>
+  <span class="spacer"></span>
+  <button class="navbtn" id="aspectBtn" title="Đổi khổ ngang / dọc">📱 Khổ dọc 9:16</button>
+</header>
+
+<div class="wrap">
+  <div>
+    <div class="stagebox"><div class="stage" id="stage">
+      <div class="placeholder"><div class="big">▶</div><div>Chọn một mục bên phải để bắt đầu xem</div></div>
+    </div></div>
+    <div class="nowbar">
+      <button class="navbtn" id="prevBtn">⏮ Trước</button>
+      <div class="title">
+        <div id="nowTitle">— Chưa phát —</div>
+        <div class="cat" id="nowCat"></div>
+      </div>
+      <a class="ytlink" id="ytLink" href="#" target="_blank" rel="noopener" style="display:none">↗ Mở trên YouTube</a>
+      <button class="navbtn" id="nextBtn">Tiếp ⏭</button>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="card">
+      <h2>📑 PLAYLIST</h2>
+      <div id="playlist"></div>
+      <div class="addbox">
+        <input id="addUrl" placeholder="Dán link YouTube (video / playlist) để thêm...">
+        <input id="addTitle" placeholder="Tên (tùy chọn)">
+        <button id="addBtn">➕ Thêm vào playlist</button>
+      </div>
+      <div class="hint">Dán được cả <b>link playlist</b> (youtube.com/playlist?list=...) lẫn link video. Mục <b>LIST</b> tự chạy hết series. Lưu trong máy, mở lại vẫn còn. Rê chuột → ✕ để xóa.</div>
+    </div>
+    <div class="card">
+      <h2>🔒 KINH ĐIỂN (khóa bản quyền — bấm để search)</h2>
+      <div class="chips" id="lockedChips"></div>
+    </div>
+    <div class="card">
+      <h2>📺 KÊNH CÀY HOÀI KHÔNG HẾT</h2>
+      <div class="chips" id="channelChips"></div>
+    </div>
+  </div>
+</div>
+
+<footer>Rạp Mini · Jenny Pixel Studio 💛 · chạy offline · phím tắt: N (tiếp) · P (trước)</footer>
+
+<script>
+const BASE=[
+  { cat:'📺 Playlist / cả series (mỗi cái nhiều phim — tự chạy)', items:[
+    { t:'Pixar SparkShorts — cả bộ', id:'PLpVg7pgd-JzP-DWROTsaMY8IDWElHMycx', kind:'playlist' },
+    { t:'Larva — Full Episodes (TUBAn)', id:'PLQthiA0aCohUDhim58SswomDVJxDYu83n', kind:'playlist' },
+    { t:'Grizzy & the Lemmings — Compilations', id:'PLfcmsKi1TD5z-BLQ2GVA4txE6uAaCvDWb', kind:'playlist' },
+    { t:'Shaun the Sheep — Full Episodes', id:'PLZ4rmdfI0ZxztE3Xgh8huH2uJED159g8P', kind:'playlist' },
+    { t:"Simon's Cat — Compilation", id:'PLgEg_cI9hTvUzGbiVXEIEV6LvAYY5rKWY', kind:'playlist' },
+    { t:'GOBELINS — Shorts 2023 (phim trường)', id:'PL7IGBkaIQiG-SJUf1ownEQXlbv-S8s-Nw', kind:'playlist' },
+    { t:'GOBELINS — Shorts 2021', id:'PL7IGBkaIQiG8vpSlI_cDV1DhV3xV9snDE', kind:'playlist' },
+    { t:'One Small Step — Videos (Taiko)', id:'PLh-HUhh5bIiUCiJBoVwCiq4W9AxbMi6j2', kind:'playlist' },
+  ]},
+  { cat:'🎬 Phim lẻ hay (nhúng phát thẳng)', items:[
+    { t:'Caminandes 1: Llama Drama (Blender)', id:'JOhiWY7XmoY' },
+    { t:'Caminandes 2: Gran Dillama (Blender)', id:'Z4C82eyhwgU' },
+    { t:'Caminandes 3: Llamigos (Blender)', id:'nqBua7oeRCY' },
+    { t:'The Present — cậu bé & chó 3 chân', id:'C_nJJHaNmnY' },
+    { t:'Alike — phi ngôn ngữ + ý nghĩa sâu', id:'PDHIyrfMl_U' },
+    { t:'Float (Pixar SparkShorts)', id:'920PLE0QiqU' },
+    { t:'GOBELINS — Try Hard (2023)', id:'LWpRdTMjEmM' },
+    { t:'GOBELINS — Sunscreen (2023)', id:'Na-4Unv0voQ' },
+    { t:'Oggy — Full Episodes HD (compilation)', id:'ldouKXyJQZM' },
+    { t:'Shaun the Sheep — 1 giờ compilation', id:'Mip3nQkHr1k' },
+    { t:'Grizzy — 25 phút compilation', id:'6WKNPZYYCjQ' },
+  ]},
+];
+const LOCKED=['For the Birds Pixar','Piper Pixar short','Presto Pixar','One Man Band Pixar','Geri\'s Game Pixar','Paperman Disney','Bao Pixar','Kitbull Pixar SparkShorts','Bernard Bear cartoon','Pingu official','Tom and Jerry classic'];
+const CHANNELS=[
+  ['Pixar','https://www.youtube.com/@Pixar'],['Disney Animation','https://www.youtube.com/@disneyanimation'],
+  ['Aardman','https://www.youtube.com/@aardman'],['Xilam (Oggy, Zig&Sharko)','https://www.youtube.com/c/xilam'],
+  ['Grizzy & the Lemmings','https://www.youtube.com/channel/UCn9l4gU5mkmmlC2eiVu0LHw'],['Larva TUBAn','https://www.youtube.com/@LarvaTUBA'],
+  ['Shaun & Friends','https://www.youtube.com/@ShaunandFriendsOfficial'],['GOBELINS','https://www.youtube.com/@gobelins-paris'],
+  ["Simon's Cat",'https://www.youtube.com/@simonscat'],['The CGBros','https://www.youtube.com/@TheCGBros'],
+  ['Short of the Week','https://www.shortoftheweek.com/'],['Blender Studio','https://www.youtube.com/@BlenderOfficial'],
+];
+
+const LS='rapmini_user_videos';
+function loadUser(){ try{ return JSON.parse(localStorage.getItem(LS)||'[]'); }catch(_){ return []; } }
+function saveUser(a){ try{ localStorage.setItem(LS, JSON.stringify(a)); }catch(_){} }
+let flat=[], current=-1;
+
+function buildFlat(){ flat=[]; for(const g of BASE) for(const it of g.items) flat.push({...it,cat:g.cat}); for(const it of loadUser()) flat.push({...it,cat:'➕ Bạn thêm',user:true}); }
+function parseYT(url){ url=String(url).trim();
+  const pl=url.match(/[?&]list=([A-Za-z0-9_-]+)/);
+  if(pl && /\/playlist|list=/.test(url) && !/[?&]v=/.test(url)) return {id:pl[1],kind:'playlist'};
+  const v=url.match(/(?:v=|youtu\.be\/|\/shorts\/|\/embed\/)([A-Za-z0-9_-]{11})/);
+  if(v) return {id:v[1],kind:'video'};
+  if(pl) return {id:pl[1],kind:'playlist'};
+  if(/^[A-Za-z0-9_-]{11}$/.test(url)) return {id:url,kind:'video'};
+  return null;
+}
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderPlaylist(){
+  buildFlat();
+  const el=document.getElementById('playlist'); let html='',lastCat='',idx=0;
+  for(const v of flat){
+    if(v.cat!==lastCat){ html+=`<div class="cat-label">${v.cat}</div>`; lastCat=v.cat; }
+    const i=idx;
+    html+=`<div class="item ${i===current?'active':''}" data-i="${i}"><span class="num">${i+1}</span><span class="t">${esc(v.t)}</span>${v.kind==='playlist'?'<span class="pl">LIST</span>':''}${v.user?`<button class="del" data-del="${i}" title="Xóa">✕</button>`:''}</div>`;
+    idx++;
+  }
+  el.innerHTML=html;
+  el.querySelectorAll('.item').forEach(it=>it.addEventListener('click',e=>{ if(e.target.dataset.del!==undefined)return; play(+it.dataset.i); }));
+  el.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); delUser(+b.dataset.del); }));
+}
+function renderChips(){
+  document.getElementById('lockedChips').innerHTML=LOCKED.map(q=>`<a class="chip lock" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(q)}">${esc(q.replace(/ (Pixar|Disney|short|SparkShorts|cartoon|official|classic).*$/,''))}</a>`).join('');
+  document.getElementById('channelChips').innerHTML=CHANNELS.map(([n,u])=>`<a class="chip" target="_blank" rel="noopener" href="${u}">${esc(n)}</a>`).join('');
+}
+
+function play(i){
+  if(i<0||i>=flat.length) return;
+  current=i; const v=flat[i];
+  const src = v.kind==='playlist'
+    ? `https://www.youtube.com/embed/videoseries?list=${v.id}&autoplay=1&rel=0&modestbranding=1`
+    : `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+  document.getElementById('stage').innerHTML=`<iframe src="${src}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+  document.getElementById('nowTitle').textContent=v.t;
+  document.getElementById('nowCat').textContent=v.cat + (v.kind==='playlist'?' · (tự chạy hết series)':'');
+  const yl=document.getElementById('ytLink');
+  yl.style.display=''; yl.href = v.kind==='playlist' ? 'https://www.youtube.com/playlist?list='+v.id : 'https://www.youtube.com/watch?v='+v.id;
+  renderPlaylist();
+}
+function playNext(){ if(current<flat.length-1) play(current+1); }
+function playPrev(){ if(current>0) play(current-1); }
+
+function addUser(){
+  const url=document.getElementById('addUrl').value.trim(); const p=parseYT(url);
+  if(!p){ alert('Link không hợp lệ. Dán link video (watch?v=... / youtu.be/...) hoặc playlist (playlist?list=...).'); return; }
+  const t=document.getElementById('addTitle').value.trim() || (p.kind==='playlist'?'Playlist thêm — '+p.id:'Phim thêm — '+p.id);
+  const u=loadUser(); u.push({t,id:p.id,kind:p.kind}); saveUser(u);
+  document.getElementById('addUrl').value=''; document.getElementById('addTitle').value=''; renderPlaylist();
+}
+function delUser(i){ const v=flat[i]; if(!v||!v.user)return; const u=loadUser(); const k=u.findIndex(x=>x.id===v.id&&x.t===v.t); if(k>=0){u.splice(k,1);saveUser(u);} if(current===i)current=-1; renderPlaylist(); }
+
+let portrait=false;
+document.getElementById('aspectBtn').onclick=()=>{ portrait=!portrait; document.getElementById('stage').classList.toggle('portrait',portrait); const b=document.getElementById('aspectBtn'); b.textContent=portrait?'🖥 Khổ ngang 16:9':'📱 Khổ dọc 9:16'; b.classList.toggle('on',portrait); };
+document.getElementById('nextBtn').onclick=playNext;
+document.getElementById('prevBtn').onclick=playPrev;
+document.getElementById('addBtn').onclick=addUser;
+document.getElementById('addUrl').addEventListener('keydown',e=>{ if(e.key==='Enter')addUser(); });
+document.addEventListener('keydown',e=>{ if(e.target.tagName==='INPUT')return; if(e.key==='n'||e.key==='N')playNext(); if(e.key==='p'||e.key==='P')playPrev(); });
+
+renderPlaylist(); renderChips();
+</script>
+</body>
+</html>
